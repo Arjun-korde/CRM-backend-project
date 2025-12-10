@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
 
     let userStatus = req.body.userStatus;
 
-    if (!req.body.userType || !req.body.userType == 'CUSTOMER') {
+    if (!req.body.userType || req.body.userType == 'CUSTOMER') {
         userStatus = "APPROVED";
     } else {
         userStatus = "PENDING";
