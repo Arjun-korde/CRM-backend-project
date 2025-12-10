@@ -15,7 +15,7 @@ const authRouter = require('./routes/auth.route');
         // default admin setup
         const user = await User.findOne({ userId: "admin" });
 
-        if(!user){
+        if (!user) {
             console.log('Admin not present');
             // let's create a new admin
             const admin = await User.create({
@@ -23,16 +23,16 @@ const authRouter = require('./routes/auth.route');
                 userId: 'admin',
                 email: "arjunkorde2004@gmail.com",
                 userType: "ADMIN",
-                password: bcrypt.hashSync('arjun',10)
+                password: bcrypt.hashSync('arjun', 10)
             });
             console.log("admin created: ", admin);
-            
+
         } else {
             console.log('Admin already present');
         }
 
 
-     } catch (err) {
+    } catch (err) {
         console.log("Error while mongoDB connection: ", err);
 
     }
@@ -46,8 +46,8 @@ app.use('/api/v1', authRouter);
 
 app.get('/', (req, res) => {
     console.log('Hit / route');
-    res.json({message: "welcome to home route"});
-})
+    res.json({ message: "welcome to home route" });
+});
 
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
