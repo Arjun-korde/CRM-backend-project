@@ -4,6 +4,7 @@ const app = express();
 require('dotenv').config();
 const User = require('./models/user.model');
 const bcrypt = require('bcrypt');
+const authRouter = require('./routes/auth.route');
 
 // connect to mongoDB
 (async () => {
@@ -37,7 +38,18 @@ const bcrypt = require('bcrypt');
     }
 })();
 
+// To parse json type of request
+app.use(express.json());
+
+// attach auth route
+app.use('/api/v1', authRouter);
+
+app.get('/', (req, res) => {
+    console.log('Hit / route');
+    res.json({message: "welcome to home route"});
+})
+
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
-    console.log(`server listening on http:/localhost:${PORT}`);
-})
+    console.log(`server listening on http://localhost:${PORT}`);
+});
