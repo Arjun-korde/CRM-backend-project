@@ -2,6 +2,9 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
+const { generateAccessToken } = require('../utils/token.util');
+const { hashPassword, comparePassword } = require('../utils/password.util');
+
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
@@ -13,14 +16,14 @@ exports.signup = async (req, res) => {
     } else {
         userStatus = "PENDING";
     }
-
+    
     // to store the user the in the DB
     const userObj = {
         name: req.body.name,
         userId: req.body.userId,
         email: req.body.email,
         userType: req.body.userType,
-        password: bcrypt.hashSync(req.body.password, Number(process.env.SALT_ROUNDS)),
+        password: await hashPassword(req.body.password),
         userStatus: userStatus
     };
 
@@ -48,7 +51,7 @@ exports.signin = async (req, res) => {
 
     const { userId, password } = req.body;
     console.log(userId, password);
-
+    
     if (!userId || !password) {
         return res.status(400).json({ message: "userId and passwod required !" });
     }
@@ -60,19 +63,13 @@ exports.signin = async (req, res) => {
     }
 
     // validate the password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
         return res.status(400).json({ message: "invalid userId or password (password)!" });
     }
 
     // issue jwt token 
-    const token = jwt.sign({
-        userId: user.userId,
-        userType: user.userType
-    },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.TOKEN_EXPIRES_IN }
-    );
+    const token = generateAccessToken({ userId: user.userId, userType: user.userType });
 
     res.status(200).json({
         name: user.name,

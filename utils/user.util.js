@@ -6,7 +6,7 @@ exports.sanitizeUsers = (users) => {
     users.forEach(user => {
         usersResult.push({
             name: user.name,
-            userId: user.userId, 
+            userId: user.userId,
             email: user.email,
             userType: user.userType,
             userStatus: user.userStatus
