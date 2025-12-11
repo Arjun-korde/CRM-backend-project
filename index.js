@@ -5,6 +5,7 @@ require('dotenv').config();
 const User = require('./models/user.model');
 const bcrypt = require('bcrypt');
 const authRouter = require('./routes/auth.route');
+const userRouter = require('./routes/user.route');
 
 // connect to mongoDB
 (async () => {
@@ -41,8 +42,9 @@ const authRouter = require('./routes/auth.route');
 // To parse json type of request
 app.use(express.json());
 
-// attach auth route
+// attach routers
 app.use('/api/v1', authRouter);
+app.use('/api/v1', userRouter);
 
 app.get('/', (req, res) => {
     console.log('Hit / route');
