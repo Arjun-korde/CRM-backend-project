@@ -1,8 +1,8 @@
 module.exports = {
-    USER_TYPES: {
-        CUSTOMER: "CUSTOMER",
-        ENGINEER: "ENGINEER",
-        ADMIN: "ADMIN"
+    USER_ROLE: {
+        CUSTOMER: "customer",
+        ENGINEER: "engineer",
+        ADMIN: "admin"
     },
 
     USER_STATUS: {

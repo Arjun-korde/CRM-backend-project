@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { USER_ROLE, USER_STATUS } = require('../constants/userConstants');
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -22,15 +24,15 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ["CUSTOMER", "ADMIN", "ENGINEER"],
+        enum: [USER_ROLE.CUSTOMER, USER_ROLE.ADMIN, USER_ROLE.ENGINEER],
         required: true,
-        default: "CUSTOMER"
+        default: USER_ROLE.CUSTOMER
     },
     userStatus: {
         type: String,
-        enum: ["APPROVED", "PENDING", "BLOCKED"],
+        enum: [USER_STATUS.APPROVED, USER_STATUS.PENDING, USER_STATUS.BLOCKED],
         required: true,
-        default: "APPROVED"
+        default: USER_STATUS.APPROVED
     }
 },
     { timestamps: true }

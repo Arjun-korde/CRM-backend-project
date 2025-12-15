@@ -4,6 +4,7 @@ const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken } = require('../utils/token.util');
 const { hashPassword, comparePassword } = require('../utils/password.util');
+const { USER_ROLE, USER_STATUS } = require('../constants/userConstants');
 
 require('dotenv').config();
 
@@ -11,10 +12,10 @@ exports.signup = async (req, res) => {
 
     let userStatus = req.body.userStatus;
 
-    if (!req.body.userType || req.body.userType == 'CUSTOMER') {
-        userStatus = "APPROVED";
+    if (!req.body.userType || req.body.userType == USER_ROLE.CUSTOMER) {
+        userStatus = USER_STATUS.APPROVED;
     } else {
-        userStatus = "PENDING";
+        userStatus = USER_STATUS.PENDING;
     }
     
     // to store the user the in the DB
@@ -50,7 +51,6 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
 
     const { userId, password } = req.body;
-    console.log(userId, password);
     
     if (!userId || !password) {
         return res.status(400).json({ message: "userId and passwod required !" });

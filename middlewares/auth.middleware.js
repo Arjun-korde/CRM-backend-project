@@ -10,7 +10,6 @@ const validateToken = (req, res, next) => {
     }
 
     const token = authHeader.slice(7).trim();
-    console.log('token : ', token);
     
     if (!token) {
         throw new Error('Missing access token');
@@ -22,6 +21,7 @@ const validateToken = (req, res, next) => {
     }
 
     req.userId = payload.userId;
+    req.userRole = payload.userType;
 
     next();
 
