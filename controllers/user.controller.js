@@ -41,7 +41,7 @@ exports.updateUserById = async (req, res) => {
   }
 
   // user can't update other user's profile
-  if (user.userType != USER_ROLE.ADMIN && user.userId != userId) {
+  if (req.userRole != USER_ROLE.ADMIN && req.userId != userId) {
     return res.status(403).json({ message: "can't update other user" });
   }
 
