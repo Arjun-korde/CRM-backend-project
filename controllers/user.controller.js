@@ -1,7 +1,7 @@
-const { USER_ROLE } = require("../constants/userConstants");
+const { USER_ROLE, USER_STATUS } = require("../constants/userConstants");
 const User = require("../models/user.model");
 const { hashPassword } = require("../utils/password.util");
-const { sanitizeUsers } = require("../utils/user.util");
+const { sanitizeUsers, isValidEnumValue } = require("../utils/user.util");
 
 exports.getAllusers = async (req, res) => {
   const userType = req.query.userType;
@@ -33,6 +33,7 @@ exports.updateUserById = async (req, res) => {
     return res.status(400).json({ message: "userId required" });
   }
 
+  // fetch user from the DB and check whether is exist or not
   const user = await User.findOne({ userId: userId });
   if (!user) {
     return res
@@ -40,8 +41,12 @@ exports.updateUserById = async (req, res) => {
       .json({ message: "user not found with given userId" });
   }
 
+  // authorization
+  const isAdmin = req.userRole === USER_ROLE.ADMIN;
+  const isOwn = req.userId === userId;
+
   // user can't update other user's profile
-  if (req.userRole != USER_ROLE.ADMIN && req.userId != userId) {
+  if (!isAdmin && !isOwn) {
     return res.status(403).json({ message: "can't update other user" });
   }
 
@@ -53,9 +58,27 @@ exports.updateUserById = async (req, res) => {
     email: req.body.email ?? user.email,
   };
 
-  if (req.userId === USER_ROLE.ADMIN) {
-    updateUser.userStatus = req.body.userStatus ?? user.userStatus;
-    updateUser.userType = req.body.userType ?? user.userType;
+  if (isAdmin) {
+    const { userStatus, userType: role } = req.body;
+
+    // validate userStatus value
+    if (userStatus && !isValidEnumValue(userStatus, USER_STATUS)) {
+      return res.status(400).json({
+        message: `Invalid userStatus allowed only (${Object.values(
+          USER_STATUS
+        )})`,
+      });
+    }
+    // now we can safely edit userStatus
+    updateUser.userStatus = user.userStatus;
+
+    //validate the role value
+    if (role && !isValidEnumValue(role, USER_ROLE)) {
+      return res.status(400).json({
+        message: `Invalid userType allowed only (${Object.values(USER_ROLE)}) `,
+      });
+    }
+    updateUser.userType = user.userType;
   }
 
   const updatedUser = await User.updateOne({ userId }, updateUser);
