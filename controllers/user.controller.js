@@ -1,7 +1,7 @@
-const { USER_ROLE, USER_STATUS } = require("../constants/userConstants");
-const User = require("../models/user.model");
-const { hashPassword } = require("../utils/password.util");
-const { sanitizeUsers, isValidEnumValue } = require("../utils/user.util");
+const { USER_ROLE, USER_STATUS } = require('../constants/userConstants');
+const User = require('../models/user.model');
+const { hashPassword } = require('../utils/password.util');
+const { sanitizeUsers, isValidEnumValue } = require('../utils/user.util');
 
 exports.getAllusers = async (req, res) => {
   const userType = req.query.userType;
@@ -21,7 +21,7 @@ exports.getUserById = async (req, res) => {
 
   const users = await User.find({ userId });
   if (!users || users.length < 2)
-    return res.status(400).json({ message: "user with given id not found" });
+    return res.status(400).json({ message: 'user with given id not found' });
 
   res.status(200).json(sanitizeUsers(users));
 };
@@ -30,7 +30,7 @@ exports.updateUserById = async (req, res) => {
   const userId = req.params.userId;
 
   if (!userId) {
-    return res.status(400).json({ message: "userId required" });
+    return res.status(400).json({ message: 'userId required' });
   }
 
   // fetch user from the DB and check whether is exist or not
@@ -38,7 +38,7 @@ exports.updateUserById = async (req, res) => {
   if (!user) {
     return res
       .status(200)
-      .json({ message: "user not found with given userId" });
+      .json({ message: 'user not found with given userId' });
   }
 
   // authorization
@@ -83,5 +83,5 @@ exports.updateUserById = async (req, res) => {
 
   const updatedUser = await User.updateOne({ userId }, updateUser);
 
-  res.status(200).json({ message: "user updated successfully", updatedUser });
+  res.status(200).json({ message: 'user updated successfully', updatedUser });
 };

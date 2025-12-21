@@ -3,7 +3,7 @@ function allowRoles(...allowed) {
     const roles = [req.userRole] || [];
 
     const hasAccess = roles.some((r) => allowed.includes(r));
-    if (!hasAccess) return res.status(403).json({ message: "Forbidden" });
+    if (!hasAccess) return res.status(403).json({ message: 'Forbidden' });
 
     next();
   };

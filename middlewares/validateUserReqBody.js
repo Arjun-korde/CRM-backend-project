@@ -1,30 +1,30 @@
-const { model } = require("mongoose");
-const { USER_TYPES, USER_ROLE } = require("../constants/userConstants");
-const User = require("../models/user.model");
+const { model } = require('mongoose');
+const { USER_TYPES, USER_ROLE } = require('../constants/userConstants');
+const User = require('../models/user.model');
 
 validateUserRequestBody = async (req, res, next) => {
   //validate the username
   if (!req.body.name) {
     return res.status(400).json({
-      message: "Failed! Bad Request, name required",
+      message: 'Failed! Bad Request, name required',
     });
   }
 
   if (!req.body.userId) {
     return res.status(400).json({
-      message: "userId required !",
+      message: 'userId required !',
     });
   }
 
   if (!req.body.email) {
     return res.status(400).json({
-      message: "email required !",
+      message: 'email required !',
     });
   }
 
   if (!req.body.password) {
     return res.status(400).json({
-      message: "password required !",
+      message: 'password required !',
     });
   }
 
@@ -32,7 +32,7 @@ validateUserRequestBody = async (req, res, next) => {
 
   if (user) {
     return res.status(400).json({
-      message: "user with this userId already exist",
+      message: 'user with this userId already exist',
     });
   }
 
@@ -40,7 +40,7 @@ validateUserRequestBody = async (req, res, next) => {
 
   if (user_email) {
     return res.status(400).json({
-      message: "user with this email already exist",
+      message: 'user with this email already exist',
     });
   }
 
@@ -52,7 +52,7 @@ validateUserRequestBody = async (req, res, next) => {
 
   if (!possibelUserTypes.includes(req.body.userType)) {
     return res.status(400).json({
-      message: "invalid userType !",
+      message: 'invalid userType !',
     });
   }
 
